@@ -1,43 +1,12 @@
 import pandas
 import numpy as np
 from Zinbra import *
+from ChipDiff import *
 import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-def main():
-    basepath = "~/AU/Research/"
-    datafolder = basepath + "Data/"
-    toolsfolder = basepath + "Tools/"
-    tools_output_folder = datafolder + "tools_output/"
-    bedfolder = datafolder + "/bed/"
-
-    # Data settings
-    reference = datafolder + "hg19.2bit"
-
-    rep1_vehicle = bedfolder + "FOXA1/GSM1534736_FOXA1_ChIP-seq_Vehicle_rep1.bed.gz"
-    rep2_vehicle = bedfolder + "FOXA1/GSM1534737_FOXA1_ChIP-seq_Vehicle_rep2.bed.gz"
-
-    rep1_e2 = bedfolder + "FOXA1/GSM1534738_FOXA1_ChIP-seq_E2_rep1.bed.gz"
-    rep2_e2 = bedfolder + "FOXA1/GSM1534739_FOXA1_ChIP-seq_E2_rep2.bed.gz"
-    #
-
-
-    ###
-    ### Analysis of Vehicle and E2 data
-    ###
-    zinbra = Zinbra(toolsfolder + "zinbra/")
-    zinbra.set_reference(reference)
-
-    out_vehicle = tools_output_folder + "zinbra/" + "result_vehicle.bed"
-    out_e2 = tools_output_folder + "zinbra/" + "result_e2.bed"
-
-    zinbra.add_replicates([rep1_vehicle, rep2_vehicle])
-    zinbra.run_analyze(fdr=0.0001, only="chr1", bed=out_vehicle)
-
-    zinbra.add_replicates([rep1_e2, rep2_e2])
-    zinbra.run_analyze(fdr=0.0001, only="chr1", bed=out_e2)
-
+def make_plots(out_e2, out_vehicle):
     # load peaks
     header = ['chr', 'start', 'end', 'strand']
     df_vh = pandas.read_table(out_vehicle)
@@ -59,10 +28,66 @@ def main():
     ax1.set_ylabel("Number of differential peaks")
     sns.violinplot(data=[df_e2['peak_len'], df_vh['peak_len']], ax=ax2, palette="pastel")
     ax2.set_ylabel("Peak length")
-    sns.kdeplot(df_vh['peak_len'], ax=ax3)
-    sns.kdeplot(df_e2['peak_len'], ax=ax3)
+    sns.kdeplot(df_vh['peak_len'].values, ax=ax3)
+    sns.kdeplot(df_e2['peak_len'].values, ax=ax3)
     ax3.set_ylabel("Density")
     plt.show()
+
+
+def main():
+    basepath = "/home/denovo/AU/Research/"
+    datafolder = basepath + "Data/"
+    toolsfolder = basepath + "Tools/"
+    tools_output_folder = datafolder + "tools_output/"
+    bedfolder = datafolder + "bed/"
+
+    # Data settings
+    reference = datafolder + "hg19.2bit"
+
+    rep1_vehicle = bedfolder + "FOXA1/GSM1534736_FOXA1_ChIP-seq_Vehicle_rep1.bed.gz"
+    rep2_vehicle = bedfolder + "FOXA1/GSM1534737_FOXA1_ChIP-seq_Vehicle_rep2.bed.gz"
+
+    rep1_e2 = bedfolder + "FOXA1/GSM1534738_FOXA1_ChIP-seq_E2_rep1.bed.gz"
+    rep2_e2 = bedfolder + "FOXA1/GSM1534739_FOXA1_ChIP-seq_E2_rep2.bed.gz"
+    #
+
+
+    ###
+    ### Zinbra:
+    ### Analysis of Vehicle and E2 data
+    ###
+    zinbra = Zinbra(toolsfolder + "zinbra/")
+    zinbra.set_reference(reference)
+
+    out_vehicle = tools_output_folder + "zinbra/" + "result_vehicle.bed"
+    out_e2 = tools_output_folder + "zinbra/" + "result_e2.bed"
+
+    zinbra.add_replicates([rep1_vehicle, rep2_vehicle])
+    zinbra.run_analyze(fdr=0.0001, only="chr1", bed=out_vehicle)
+
+    zinbra.add_replicates([rep1_e2, rep2_e2])
+    zinbra.run_analyze(fdr=0.0001, only="chr1", bed=out_e2)
+
+    make_plots(out_e2, out_vehicle)
+
+    ###
+    ### ChipDiff:
+    ### Analysis of Vehicle and E2 data
+    ###
+    chr_description = bedfolder + "chrom_descr.txt"
+    chipdiff = ChipDiff(toolsfolder + "chipdiff/")
+
+    chipdiff.set_libraries(rep1_vehicle, rep2_vehicle)
+    chipdiff.configure("result_vehicle", chr_description)
+    chipdiff.run()
+
+    chipdiff.set_libraries(rep1_e2, rep2_e2)
+    chipdiff.configure("result_e2", chr_description)
+    chipdiff.run()
+
+    out_vehicle = tools_output_folder + "chipdiff/" + "result_vehicle.region"
+    out_e2 = tools_output_folder + "chipdiff/" + "result_e2.region"
+    make_plots(out_e2, out_vehicle)
 
 
 if __name__ == '__main__':
