@@ -78,7 +78,11 @@ class MACS2():
                     " --c1 {3}" \
                     " --c2 {4}" \
                     " --outdir {5}" \
-                    " --o-prefix {6}".format(self.where_macs2,
-                                             cond1, cond2, ctrl1, ctrl2, self.outdir, prefix)
+                    " --o-prefix {6}" \
+                    " --cutoff {7}" \
+                    " --min-len {8}" \
+                    " --max-gap {9}".format(self.where_macs2,
+                                            cond1, cond2, ctrl1, ctrl2, self.outdir, prefix,
+                                            self.cutoff, self.minlen, self.maxgap)
 
         run_in_shell(runstring)

@@ -105,17 +105,18 @@ def main():
 
     macs2.set_conditions(rep1_vehicle, rep2_vehicle)
     macs2.set_controls(input_vehicle_rep1, input_vehicle_rep2)
-    macs2.configure(outdir=tools_output_folder + "macs2/")
+    macs2.configure(outdir=tools_output_folder + "macs2/", maxgap=60)
     macs2.run_bdgdiff("vh")
 
     macs2.set_conditions(rep1_e2, rep2_e2)
     macs2.set_controls(input_e2_rep1, input_e2_rep2)
-    macs2.configure(outdir=tools_output_folder + "macs2/")
+    macs2.configure(outdir=tools_output_folder + "macs2/", maxgap=60)
     macs2.run_bdgdiff("e2")
 
     out_vehicle = tools_output_folder + "macs2/" + "vh_c3.0_common.bed"
     out_e2 = tools_output_folder + "macs2/" + "e2_c3.0_common.bed"
     make_plots(out_e2, out_vehicle)
+
 
 if __name__ == '__main__':
     main()
