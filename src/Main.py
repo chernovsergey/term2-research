@@ -2,6 +2,7 @@ import pandas
 import numpy as np
 from Zinbra import *
 from ChipDiff import *
+from MACS2 import *
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -17,6 +18,9 @@ def make_plots(out_e2, out_vehicle):
     # peak length
     df_vh['peak_len'] = df_vh['end'].astype(np.int) - df_vh['start'].astype(np.int)
     df_e2['peak_len'] = df_e2['end'].astype(np.int) - df_e2['start'].astype(np.int)
+
+    print df_vh['peak_len'].values
+    print df_e2['peak_len'].values
 
     # number of differential peaks
     number_dr_vh = len(df_vh)
@@ -44,9 +48,13 @@ def main():
     # Data settings
     reference = datafolder + "hg19.2bit"
 
+    input_vehicle_rep1 = bedfolder + "FOXA1/Input_ChIP-seq_Vehicle_rep1.bed.gz"
+    input_vehicle_rep2 = bedfolder + "FOXA1/Input_ChIP-seq_Vehicle_rep2.bed.gz"
     rep1_vehicle = bedfolder + "FOXA1/GSM1534736_FOXA1_ChIP-seq_Vehicle_rep1.bed.gz"
     rep2_vehicle = bedfolder + "FOXA1/GSM1534737_FOXA1_ChIP-seq_Vehicle_rep2.bed.gz"
 
+    input_e2_rep1 = bedfolder + "FOXA1/Input_ChIP-seq_E2_rep1.bed.gz"
+    input_e2_rep2 = bedfolder + "FOXA1/Input_ChIP-seq_E2_rep2.bed.gz"
     rep1_e2 = bedfolder + "FOXA1/GSM1534738_FOXA1_ChIP-seq_E2_rep1.bed.gz"
     rep2_e2 = bedfolder + "FOXA1/GSM1534739_FOXA1_ChIP-seq_E2_rep2.bed.gz"
     #
@@ -89,6 +97,25 @@ def main():
     out_e2 = tools_output_folder + "chipdiff/" + "result_e2.region"
     make_plots(out_e2, out_vehicle)
 
+    ###
+    ### MACS2:
+    ### Analysis of Vehicle and E2 data
+    ###
+    macs2 = MACS2("/home/denovo/miniconda/bin")
+
+    macs2.set_conditions(rep1_vehicle, rep2_vehicle)
+    macs2.set_controls(input_vehicle_rep1, input_vehicle_rep2)
+    macs2.configure(outdir=tools_output_folder + "macs2/")
+    macs2.run_bdgdiff("vh")
+
+    macs2.set_conditions(rep1_e2, rep2_e2)
+    macs2.set_controls(input_e2_rep1, input_e2_rep2)
+    macs2.configure(outdir=tools_output_folder + "macs2/")
+    macs2.run_bdgdiff("e2")
+
+    out_vehicle = tools_output_folder + "macs2/" + "vh_c3.0_common.bed"
+    out_e2 = tools_output_folder + "macs2/" + "e2_c3.0_common.bed"
+    make_plots(out_e2, out_vehicle)
 
 if __name__ == '__main__':
     main()

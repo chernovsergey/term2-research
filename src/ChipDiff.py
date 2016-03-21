@@ -1,5 +1,5 @@
 from util import *
-from os.path import *
+import os.path
 
 class ChipDiff():
     libraries = []
