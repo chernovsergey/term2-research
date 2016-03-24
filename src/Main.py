@@ -1,121 +1,50 @@
-import pandas
-import numpy as np
-from Zinbra import *
-from ChipDiff import *
-from MACS2 import *
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-
-def make_plots(out_e2, out_vehicle):
-    # load peaks
-    header = ['chr', 'start', 'end', 'strand']
-    df_vh = pandas.read_table(out_vehicle)
-    df_e2 = pandas.read_table(out_e2)
-    df_vh.columns = header
-    df_e2.columns = header
-
-    # peak length
-    df_vh['peak_len'] = df_vh['end'].astype(np.int) - df_vh['start'].astype(np.int)
-    df_e2['peak_len'] = df_e2['end'].astype(np.int) - df_e2['start'].astype(np.int)
-
-    print df_vh['peak_len'].values
-    print df_e2['peak_len'].values
-
-    # number of differential peaks
-    number_dr_vh = len(df_vh)
-    number_dr_e2 = len(df_e2)
-
-    # Plotting
-    f, (ax1, ax2, ax3) = plt.subplots(3, 1)
-    sns.barplot(["Vehicle", "E2"], [number_dr_vh, number_dr_e2], palette="pastel", ax=ax1)
-    ax1.set_ylabel("Number of differential peaks")
-    sns.violinplot(data=[df_e2['peak_len'], df_vh['peak_len']], ax=ax2, palette="pastel")
-    ax2.set_ylabel("Peak length")
-    sns.kdeplot(df_vh['peak_len'].values, ax=ax3)
-    sns.kdeplot(df_e2['peak_len'].values, ax=ax3)
-    ax3.set_ylabel("Density")
-    plt.show()
+from src.tools.running import *
 
 
 def main():
-    basepath = "/home/denovo/AU/Research/"
-    datafolder = basepath + "Data/"
-    toolsfolder = basepath + "Tools/"
-    tools_output_folder = datafolder + "tools_output/"
-    bedfolder = datafolder + "bed/"
+    base_path = "/home/denovo/AU/Research/"
+    data_path = base_path + "Data/"
+    tools_path = base_path + "Tools/"
+    bedfiles = data_path + "bed/"
+    tools_output_path = data_path + "tools_output/"
 
     # Data settings
-    reference = datafolder + "hg19.2bit"
+    reference = data_path + "hg19.2bit"
+    foxa1 = bedfiles + "FOXA1/"
 
-    input_vehicle_rep1 = bedfolder + "FOXA1/GSM1534712_Input_ChIP-seq_Vehicle_rep1.bed.gz"
-    input_vehicle_rep2 = bedfolder + "FOXA1/GSM1534713_Input_ChIP-seq_Vehicle_rep2.bed.gz"
-    rep1_vehicle = bedfolder + "FOXA1/GSM1534736_FOXA1_ChIP-seq_Vehicle_rep1.bed.gz"
-    rep2_vehicle = bedfolder + "FOXA1/GSM1534737_FOXA1_ChIP-seq_Vehicle_rep2.bed.gz"
+    rep1_vh = foxa1 + "GSM1534736_FOXA1_ChIP-seq_Vehicle_rep1.bed.gz"
+    rep2_vh = foxa1 + "GSM1534737_FOXA1_ChIP-seq_Vehicle_rep2.bed.gz"
+    input_vh_rep1 = foxa1 + "GSM1534712_Input_ChIP-seq_Vehicle_rep1.bed.gz"
+    input_vh_rep2 = foxa1 + "GSM1534713_Input_ChIP-seq_Vehicle_rep2.bed.gz"
 
-    input_e2_rep1 = bedfolder + "FOXA1/GSM1534714_Input_ChIP-seq_E2_rep1.bed.gz"
-    input_e2_rep2 = bedfolder + "FOXA1/GSM1534715_Input_ChIP-seq_E2_rep2.bed.gz"
-    rep1_e2 = bedfolder + "FOXA1/GSM1534738_FOXA1_ChIP-seq_E2_rep1.bed.gz"
-    rep2_e2 = bedfolder + "FOXA1/GSM1534739_FOXA1_ChIP-seq_E2_rep2.bed.gz"
-    #
+    rep1_e2 = foxa1 + "GSM1534738_FOXA1_ChIP-seq_E2_rep1.bed.gz"
+    rep2_e2 = foxa1 + "GSM1534739_FOXA1_ChIP-seq_E2_rep2.bed.gz"
+    input_e2_rep1 = foxa1 + "GSM1534714_Input_ChIP-seq_E2_rep1.bed.gz"
+    input_e2_rep2 = foxa1 + "GSM1534715_Input_ChIP-seq_E2_rep2.bed.gz"
 
+    # ZINBRA - ANALYZE
+    zinbra_output = tools_output_path + "zinbra/"
+    zinbra_e2 = zinbra_output + "e2.bed"
+    zinbra_vh = zinbra_output + "vh.bed"
+    zinbra_path = tools_path + "zinbra/"
+    run_zinbra_analyze(reference, rep1_e2, rep2_e2, zinbra_e2, zinbra_path, only="chr1")
+    run_zinbra_analyze(reference, rep1_vh, rep2_vh, zinbra_vh, zinbra_path, only="chr1")
 
-    ###
-    ### Zinbra:
-    ### Analysis of Vehicle and E2 data
-    ###
-    zinbra = Zinbra(toolsfolder + "zinbra/")
-    zinbra.set_reference(reference)
+    # ZINBRA - COMPARE
+    zinbra_cmp = zinbra_output + "cmp_vh_e2.bed"
+    run_zinbra_compare(reference, rep1_e2, rep2_e2, rep1_vh, rep2_vh, zinbra_cmp, zinbra_path,
+                       only="chr1")
 
-    out_vehicle = tools_output_folder + "zinbra/" + "result_vehicle.bed"
-    out_e2 = tools_output_folder + "zinbra/" + "result_e2.bed"
+    # CHIPDIFF
+    chipdif_output = tools_output_path + "chipdiff/"
+    chromosomes = bedfiles + "chrom_descr.txt"
+    chdiff_e2 = run_chipdiff(rep1_e2, rep2_e2, tools_path, chipdif_output, chromosomes, "e2")
+    chdiff_vh = run_chipdiff(rep1_vh, rep2_vh, tools_path, chipdif_output, chromosomes, "vh")
 
-    zinbra.add_replicates([rep1_vehicle, rep2_vehicle])
-    zinbra.run_analyze(fdr=0.0001, only="chr1", bed=out_vehicle)
-
-    zinbra.add_replicates([rep1_e2, rep2_e2])
-    zinbra.run_analyze(fdr=0.0001, only="chr1", bed=out_e2)
-
-    make_plots(out_e2, out_vehicle)
-    #
-    # ###
-    # ### ChipDiff:
-    # ### Analysis of Vehicle and E2 data
-    # ###
-    chr_description = bedfolder + "chrom_descr.txt"
-    chipdiff = ChipDiff(toolsfolder + "chipdiff/")
-
-    chipdiff.set_libraries(rep1_vehicle, rep2_vehicle)
-    chipdiff.configure("result_vehicle", chr_description)
-    chipdiff.run()
-
-    chipdiff.set_libraries(rep1_e2, rep2_e2)
-    chipdiff.configure("result_e2", chr_description)
-    chipdiff.run()
-
-    out_vehicle = tools_output_folder + "chipdiff/" + "result_vehicle.region"
-    out_e2 = tools_output_folder + "chipdiff/" + "result_e2.region"
-    make_plots(out_e2, out_vehicle)
-
-    ###
-    ### MACS2:
-    ### Analysis of Vehicle and E2 data
-    ###
-    macs2 = MACS2("/home/denovo/miniconda/bin")
-
-    macs2.set_conditions(rep1_vehicle, rep2_vehicle)
-    macs2.set_controls(input_vehicle_rep1, input_vehicle_rep2)
-    macs2.configure(outdir=tools_output_folder + "macs2/", maxgap=60)
-    macs2.run_bdgdiff("vh")
-
-    macs2.set_conditions(rep1_e2, rep2_e2)
-    macs2.set_controls(input_e2_rep1, input_e2_rep2)
-    macs2.configure(outdir=tools_output_folder + "macs2/", maxgap=60)
-    macs2.run_bdgdiff("e2")
-
-    out_vehicle = tools_output_folder + "macs2/" + "vh_c3.0_common.bed"
-    out_e2 = tools_output_folder + "macs2/" + "e2_c3.0_common.bed"
-    make_plots(out_e2, out_vehicle)
+    # MACS2
+    macs2_output = tools_output_path + "macs2/"
+    macs2_e2 = run_macs2(rep1_e2, rep2_e2, input_e2_rep1, input_e2_rep2, macs2_output, "e2")
+    macs2_vh = run_macs2(rep1_vh, rep2_vh, input_vh_rep1, input_vh_rep2, macs2_output, "vh")
 
 
 if __name__ == '__main__':

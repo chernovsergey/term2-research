@@ -1,9 +1,11 @@
 from abc import ABCMeta, abstractmethod
 
 
-class AbstractTool(metaclass=ABCMeta):
+class AbstractTool():
+    __metaclass__ = ABCMeta
+
     @abstractmethod
-    def set_input(self):
+    def configure_data(self):
         """
         - **parameters**, **types**, **return** and **return types**::
 
@@ -12,7 +14,7 @@ class AbstractTool(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def configure(self):
+    def configure_run_params(self):
         """
         - **parameters**, **types**, **return** and **return types**::
 
