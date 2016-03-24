@@ -48,13 +48,13 @@ def main():
     # Data settings
     reference = datafolder + "hg19.2bit"
 
-    input_vehicle_rep1 = bedfolder + "FOXA1/Input_ChIP-seq_Vehicle_rep1.bed.gz"
-    input_vehicle_rep2 = bedfolder + "FOXA1/Input_ChIP-seq_Vehicle_rep2.bed.gz"
+    input_vehicle_rep1 = bedfolder + "FOXA1/GSM1534712_Input_ChIP-seq_Vehicle_rep1.bed.gz"
+    input_vehicle_rep2 = bedfolder + "FOXA1/GSM1534713_Input_ChIP-seq_Vehicle_rep2.bed.gz"
     rep1_vehicle = bedfolder + "FOXA1/GSM1534736_FOXA1_ChIP-seq_Vehicle_rep1.bed.gz"
     rep2_vehicle = bedfolder + "FOXA1/GSM1534737_FOXA1_ChIP-seq_Vehicle_rep2.bed.gz"
 
-    input_e2_rep1 = bedfolder + "FOXA1/Input_ChIP-seq_E2_rep1.bed.gz"
-    input_e2_rep2 = bedfolder + "FOXA1/Input_ChIP-seq_E2_rep2.bed.gz"
+    input_e2_rep1 = bedfolder + "FOXA1/GSM1534714_Input_ChIP-seq_E2_rep1.bed.gz"
+    input_e2_rep2 = bedfolder + "FOXA1/GSM1534715_Input_ChIP-seq_E2_rep2.bed.gz"
     rep1_e2 = bedfolder + "FOXA1/GSM1534738_FOXA1_ChIP-seq_E2_rep1.bed.gz"
     rep2_e2 = bedfolder + "FOXA1/GSM1534739_FOXA1_ChIP-seq_E2_rep2.bed.gz"
     #
@@ -77,11 +77,11 @@ def main():
     zinbra.run_analyze(fdr=0.0001, only="chr1", bed=out_e2)
 
     make_plots(out_e2, out_vehicle)
-
-    ###
-    ### ChipDiff:
-    ### Analysis of Vehicle and E2 data
-    ###
+    #
+    # ###
+    # ### ChipDiff:
+    # ### Analysis of Vehicle and E2 data
+    # ###
     chr_description = bedfolder + "chrom_descr.txt"
     chipdiff = ChipDiff(toolsfolder + "chipdiff/")
 

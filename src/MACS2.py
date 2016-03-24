@@ -1,4 +1,4 @@
-from util import *
+from Utility import *
 
 
 class MACS2():
@@ -38,39 +38,33 @@ class MACS2():
         else:
             raise Error("Wrong control files")
 
-    def bed_to_bg(self, bedfile, bgfile):
-        with open(bgfile, 'w') as outfile:
-            with open(bedfile) as infile:
-                for line in infile:
-                    if line.startswith('track'):
-                        outfile.write(line)
-                    else:
-                        fields = line.strip().split()
-                        bedgraph = [fields[0], fields[1], fields[2], fields[4]]
-                        print >> outfile, '\t'.join(bedgraph)
+    def unarchive_if_necessary(self):
+        self.conditions[0] = self.unarchive_gz(self.conditions[0])
+        self.controls[0] = self.unarchive_gz(self.controls[0])
 
-    def convert_to_bedGraph(self, file):
-        name = str.split(file, ".bed.gz")[0]
+        self.conditions[1] = self.unarchive_gz(self.conditions[1])
+        self.controls[1] = self.unarchive_gz(self.controls[1])
 
-        if not os.path.exists(name + ".bedGraph"):
-
-            # unzip if it's necessary
-            if not os.path.exists(name + ".bed"):
-                run_in_shell("gunzip -c {0} > {1}".format(file, name + ".bed"))
-
-            self.bed_to_bg(name + ".bed", name + ".bedGraph")
-
-        return name + ".bedGraph"
+    def unarchive_gz(self, filename):
+        name = str.split(filename, ".bed.gz")[0]
+        if not os.path.exists(name + ".bed"):
+            run_in_shell("gunzip -c {0} > {1}".format(filename, name + ".bed"))
+        return name + ".bed"
 
     def run_bdgdiff(self, prefix):
 
         if len(self.conditions) != 2 and len(self.controls) != 2:
             raise Error("Controls and conditions has not been set")
 
-        cond1 = self.convert_to_bedGraph(self.conditions[0])
-        cond2 = self.convert_to_bedGraph(self.conditions[1])
-        ctrl1 = self.convert_to_bedGraph(self.controls[0])
-        ctrl2 = self.convert_to_bedGraph(self.controls[1])
+        if prefix is not None:
+            if prefix != "":
+                self.prefix = prefix
+            else:
+                raise Error("Passed empty prefix")
+        else:
+            raise Error("Passed wrong prefix")
+
+        self.unarchive_if_necessary()
 
         runstring = "{0}/macs2 bdgdiff" \
                     " --t1 {1}" \
@@ -82,7 +76,9 @@ class MACS2():
                     " --cutoff {7}" \
                     " --min-len {8}" \
                     " --max-gap {9}".format(self.where_macs2,
-                                            cond1, cond2, ctrl1, ctrl2, self.outdir, prefix,
-                                            self.cutoff, self.minlen, self.maxgap)
+                                            self.conditions[0], self.conditions[1],
+                                            self.controls[0], self.controls[1],
+                                            self.outdir, self.prefix, self.cutoff, self.minlen,
+                                            self.maxgap)
 
         run_in_shell(runstring)
