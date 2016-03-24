@@ -35,11 +35,14 @@ def main():
     run_zinbra_compare(reference, rep1_e2, rep2_e2, rep1_vh, rep2_vh, zinbra_cmp, zinbra_path,
                        only="chr1")
 
-    # CHIPDIFF
+    # # CHIPDIFF
     chipdif_output = tools_output_path + "chipdiff/"
     chromosomes = bedfiles + "chrom_descr.txt"
-    chdiff_e2 = run_chipdiff(rep1_e2, rep2_e2, tools_path, chipdif_output, chromosomes, "e2")
-    chdiff_vh = run_chipdiff(rep1_vh, rep2_vh, tools_path, chipdif_output, chromosomes, "vh")
+    chipdiff_path = tools_path + "chipdiff"
+    chdiff_e2 = run_chipdiff(rep1_e2, rep2_e2, chipdiff_path, chipdif_output, chromosomes, "e2")
+    chdiff_vh = run_chipdiff(rep1_vh, rep2_vh, chipdiff_path, chipdif_output, chromosomes, "vh")
+    print chdiff_e2
+    print chdiff_vh
 
     # MACS2
     macs2_output = tools_output_path + "macs2/"

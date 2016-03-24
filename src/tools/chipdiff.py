@@ -1,7 +1,7 @@
 import os.path
 
 from abstracttool import AbstractTool
-from src.auxilary.etility import *
+from src.auxilary.utility import *
 
 
 class ChipDiff(AbstractTool):
@@ -53,7 +53,7 @@ class ChipDiff(AbstractTool):
         input = " ".join([lib1, lib2])
 
         # Usage: ./ChIPDiff sample_L1.tag sample_L2.tag chrom_descr.txt config.txt sample
-        runstring = "echo {0}/myChIPDiff {1} {2} {3} {4}".format(self.where_chipdiff,
+        runstring = "{0}/myChIPDiff {1} {2} {3} {4}".format(self.where_chipdiff,
                                                             input, self.chrdescr,
                                                             self.where_chipdiff + "config.txt",
                                                             self.projname)

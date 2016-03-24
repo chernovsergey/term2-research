@@ -1,5 +1,5 @@
 from abstracttool import AbstractTool
-from src.auxilary.etility import *
+from src.auxilary.utility import *
 
 
 class MACS2(AbstractTool):

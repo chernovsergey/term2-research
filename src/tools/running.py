@@ -1,6 +1,6 @@
 from src.tools.chipdiff import *
-from src.tools.zinbra import *
 from src.tools.macs2 import *
+from src.tools.zinbra import *
 
 
 def run_macs2(rep1, rep2, input_rep1, input_rep2, output_folder, prefix):
@@ -18,6 +18,10 @@ def run_chipdiff(rep1, rep2, tool_path, outdir, chr_description_fname, prefix):
     chipdiff.configure_data(rep1, rep2)
     chipdiff.run(prefix)
 
+    run_in_shell("mv {0}.bin {1}".format(prefix, outdir))
+    run_in_shell("mv {0}.hmm {1}".format(prefix, outdir))
+    run_in_shell("mv {0}.region {1}".format(prefix, outdir))
+    run_in_shell("mv config.txt {1}".format(prefix, outdir))
     return outdir + prefix + ".region"
 
 
