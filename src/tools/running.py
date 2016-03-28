@@ -43,6 +43,6 @@ def run_zinbra_compare(ref, rep1_1, rep1_2, rep2_1, rep2_2, outfname, path, only
 
 def run_manorm(rep1, rep2, input_rep1, input_rep2, d1, d2, manorm_path, outdir):
     manorm = MAnorm(manorm_path)
-    manorm.configure_run_params(outdir)
+    manorm.configure_run_params(outdir, d1, d2)
     manorm.configure_data(rep1, input_rep1, rep2, input_rep2)
     manorm.run()

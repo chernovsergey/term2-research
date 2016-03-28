@@ -29,11 +29,19 @@ class ChipDiff(AbstractTool):
             write_line("maxTrainingSeqNum", min_training_seq_num)
 
     def convert_to_tag(self, library):
-        name = str.split(library, ".bed.gz")[0]
-        if not os.path.exists(name + ".tag"):
-            run_in_shell("gunzip -c {0} > {1}".format(library, name + ".bed"))
+
+        name = library
+
+        if str.endswith(library, ".bed.gz"):
+            name = str.split(library, ".bed.gz")[0]
+            if not os.path.exists(name + ".tag"):
+                run_in_shell("gunzip -c {0} > {1}".format(library, name + ".bed"))
+                run_in_shell("cat  {0}.bed | cut -f3,4,5 --complement > {1}.tag".format(name, name))
+                return name + ".tag"
+        elif str.endswith(library, ".bed"):
+            name = str.split(library, ".bed")[0]
             run_in_shell("cat  {0}.bed | cut -f3,4,5 --complement > {1}.tag".format(name, name))
-        return name + ".tag"
+            return name + ".tag"
 
     def run(self, prefix):
         if len(self.libraries) == 0:

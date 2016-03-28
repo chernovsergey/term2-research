@@ -72,7 +72,7 @@ class Zinbra(AbstractTool):
                     " -2 {3}".format(self.where_zinbra, self.reference, condition1, condition2)
         runstring += " --bed {0}".format(self.bed)
         runstring += " --fdr {0}".format(self.fdr)
-        runstring += " --only {0}".format(self.only)
+        # runstring += " --only {0}".format(self.only)
 
         run_in_shell(runstring)
 

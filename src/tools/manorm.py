@@ -42,12 +42,14 @@ class MAnorm(AbstractTool):
 
         self.preprocess_if_necessary()
 
-        runstring = "cd {0}; ./MAnorm.sh" \
-                    " {1}" \
+        runstring = "cp {0}/MAnorm.sh {1}" \
+                    "cp {0}/MAnorm.r {1} " \
+                    "cd {1}; ./MAnorm.sh" \
                     " {2}" \
                     " {3}" \
                     " {4}" \
-                    " {5} {6}".format(self.where_manorm,
+                    " {5}" \
+                    " {6} {7}".format(self.where_manorm, self.outdir,
                                       self.conditions[0], self.conditions[1],
                                       self.controls[0], self.controls[1],
                                       self.d1, self.d2)
