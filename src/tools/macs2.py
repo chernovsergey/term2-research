@@ -39,6 +39,22 @@ class MACS2(AbstractTool):
         self.minlen = minlen
         self.maxgap = maxgap
 
+    # TODO add parameters in accordance with macs2 callpeak --help
+    def callpeaks(self, condition, control, name, extsize, outdir):
+        """
+        macs2 callpeak -B -t cond1_ChIP.bam -c cond1_Control.bam -n cond1 --nomodel --extsize 120
+        """
+        runstring = "cd {5}; {0}/macs2 callpeak -B" \
+                    " -t {1}" \
+                    " -c {2}" \
+                    " -n {3}" \
+                    " --nomodel " \
+                    " --extsize {4}".format(self.where_macs2,
+                                            condition, control,
+                                            name, extsize, outdir)
+        run_in_shell(runstring)
+
+
     def run(self, prefix):
         if len(self.conditions) != 2 and len(self.controls) != 2:
             raise Error("Controls and conditions has not been set")

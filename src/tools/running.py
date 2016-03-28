@@ -1,5 +1,6 @@
 from src.tools.chipdiff import *
 from src.tools.macs2 import *
+from src.tools.manorm import *
 from src.tools.zinbra import *
 
 
@@ -38,3 +39,10 @@ def run_zinbra_compare(ref, rep1_1, rep1_2, rep2_1, rep2_2, outfname, path, only
     zinbra.configure_data(reference=ref, condition1_rep1=rep1_1, condition1_rep2=rep1_2,
                           condition2_rep1=rep2_1, condition2_rep2=rep2_2)
     zinbra.run(bed=outfname, compare=True)
+
+
+def run_manorm(rep1, rep2, input_rep1, input_rep2, d1, d2, manorm_path, outdir):
+    manorm = MAnorm(manorm_path)
+    manorm.configure_run_params(outdir)
+    manorm.configure_data(rep1, input_rep1, rep2, input_rep2)
+    manorm.run()

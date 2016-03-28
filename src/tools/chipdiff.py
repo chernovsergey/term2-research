@@ -33,7 +33,6 @@ class ChipDiff(AbstractTool):
         if not os.path.exists(name + ".tag"):
             run_in_shell("gunzip -c {0} > {1}".format(library, name + ".bed"))
             run_in_shell("cat  {0}.bed | cut -f3,4,5 --complement > {1}.tag".format(name, name))
-            run_in_shell("rm {0}.bed".format(name))
         return name + ".tag"
 
     def run(self, prefix):

@@ -22,32 +22,38 @@ def main():
     input_e2_rep1 = foxa1 + "GSM1534714_Input_ChIP-seq_E2_rep1.bed.gz"
     input_e2_rep2 = foxa1 + "GSM1534715_Input_ChIP-seq_E2_rep2.bed.gz"
 
-    # ZINBRA - ANALYZE
-    zinbra_output = tools_output_path + "zinbra/"
-    zinbra_e2 = zinbra_output + "e2.bed"
-    zinbra_vh = zinbra_output + "vh.bed"
-    zinbra_path = tools_path + "zinbra/"
-    run_zinbra_analyze(reference, rep1_e2, rep2_e2, zinbra_e2, zinbra_path, only="chr1")
-    run_zinbra_analyze(reference, rep1_vh, rep2_vh, zinbra_vh, zinbra_path, only="chr1")
-
+    # # ZINBRA - ANALYZE
+    # zinbra_output = tools_output_path + "zinbra/"
+    # zinbra_e2 = zinbra_output + "e2.bed"
+    # zinbra_vh = zinbra_output + "vh.bed"
+    # zinbra_path = tools_path + "zinbra/"
+    # run_zinbra_analyze(reference, rep1_e2, rep2_e2, zinbra_e2, zinbra_path, only="chr1")
+    # run_zinbra_analyze(reference, rep1_vh, rep2_vh, zinbra_vh, zinbra_path, only="chr1")
+    #
     # ZINBRA - COMPARE
-    zinbra_cmp = zinbra_output + "cmp_vh_e2.bed"
-    run_zinbra_compare(reference, rep1_e2, rep2_e2, rep1_vh, rep2_vh, zinbra_cmp, zinbra_path,
-                       only="chr1")
+    # zinbra_cmp = zinbra_output + "cmp_vh_e2.bed"
+    # run_zinbra_compare(reference, rep1_e2, rep2_e2, rep1_vh, rep2_vh, zinbra_cmp, zinbra_path,
+    #                    only="chr1")
+    #
+    # # # CHIPDIFF
+    # chipdif_output = tools_output_path + "chipdiff/"
+    # chromosomes = bedfiles + "chrom_descr.txt"
+    # chipdiff_path = tools_path + "chipdiff"
+    # chdiff_e2 = run_chipdiff(rep1_e2, rep2_e2, chipdiff_path, chipdif_output, chromosomes, "e2")
+    # chdiff_vh = run_chipdiff(rep1_vh, rep2_vh, chipdiff_path, chipdif_output, chromosomes, "vh")
+    #
+    # # MACS2
+    # macs2_output = tools_output_path + "macs2/"
+    # macs2_e2 = run_macs2(rep1_e2, rep2_e2, input_e2_rep1, input_e2_rep2, macs2_output, "e2")
+    # macs2_vh = run_macs2(rep1_vh, rep2_vh, input_vh_rep1, input_vh_rep2, macs2_output, "vh")
 
-    # # CHIPDIFF
-    chipdif_output = tools_output_path + "chipdiff/"
-    chromosomes = bedfiles + "chrom_descr.txt"
-    chipdiff_path = tools_path + "chipdiff"
-    chdiff_e2 = run_chipdiff(rep1_e2, rep2_e2, chipdiff_path, chipdif_output, chromosomes, "e2")
-    chdiff_vh = run_chipdiff(rep1_vh, rep2_vh, chipdiff_path, chipdif_output, chromosomes, "vh")
-    print chdiff_e2
-    print chdiff_vh
+    # test = run_macs2(rep1_vh, rep1_e2, input_vh_rep1, input_e2_rep1, macs2_output, "test")
 
-    # MACS2
-    macs2_output = tools_output_path + "macs2/"
-    macs2_e2 = run_macs2(rep1_e2, rep2_e2, input_e2_rep1, input_e2_rep2, macs2_output, "e2")
-    macs2_vh = run_macs2(rep1_vh, rep2_vh, input_vh_rep1, input_vh_rep2, macs2_output, "vh")
+    outdir = tools_output_path + "manorm/"
+    manorm_path = tools_path + "manorm"
+    outfiles = run_manorm(rep1_vh, rep1_e2, input_vh_rep1, input_e2_rep1, 200, 200, manorm_path,
+                          outdir)
+    print outfiles
 
 
 if __name__ == '__main__':
