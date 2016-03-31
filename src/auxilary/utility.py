@@ -1,3 +1,4 @@
+import logging
 import os
 
 
@@ -6,28 +7,29 @@ class Error(Exception):
         self.msg = msg
 
 
-def run_in_shell(cmd):
-    print "Running in shell:", cmd
-    if os.system(cmd) != 0:
-        raise Error("os.system(cmd) end up with non zero code")
-    print ""
-
-
 class Command(object):
     def __init__(self, command):
         self.command = command
 
     def run(self, shell=True):
+        INFO("sh: {0}".format(self.command))
         import subprocess as sp
         process = sp.Popen(self.command, shell=shell, stdout=sp.PIPE, stderr=sp.PIPE)
         self.pid = process.pid
         self.output, self.error = process.communicate()
         self.failed = process.returncode
+        INFO(self.output)
+        INFO(self.error)
         return self
 
     @property
     def returncode(self):
         return self.failed
+
+
+def sh(cmd):
+    if Command(cmd).run().returncode != 0:
+        raise Error("Command(cmd) end up with non zero code")
 
 
 def parse_d(filename):
@@ -38,3 +40,15 @@ def parse_d(filename):
         return result
     else:
         raise Error("file does not exist")
+
+
+def INFO(message):
+    logging.info(message)
+
+
+def DEBUG(message):
+    logging.debug(message)
+
+
+def ERR(message):
+    logging.error(message)

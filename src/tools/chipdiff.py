@@ -1,5 +1,3 @@
-import os.path
-
 from abstracttool import AbstractTool
 from src.auxilary.utility import *
 
@@ -28,21 +26,6 @@ class ChipDiff(AbstractTool):
             write_line("minP", min_p)
             write_line("maxTrainingSeqNum", min_training_seq_num)
 
-    def convert_to_tag(self, library):
-
-        name = library
-
-        if str.endswith(library, ".bed.gz"):
-            name = str.split(library, ".bed.gz")[0]
-            if not os.path.exists(name + ".tag"):
-                run_in_shell("gunzip -c {0} > {1}".format(library, name + ".bed"))
-                run_in_shell("cat  {0}.bed | cut -f3,4,5 --complement > {1}.tag".format(name, name))
-                return name + ".tag"
-        elif str.endswith(library, ".bed"):
-            name = str.split(library, ".bed")[0]
-            run_in_shell("cat  {0}.bed | cut -f3,4,5 --complement > {1}.tag".format(name, name))
-            return name + ".tag"
-
     def run(self, prefix):
         if len(self.libraries) == 0:
             raise Error("Libraries not set!")
@@ -55,9 +38,7 @@ class ChipDiff(AbstractTool):
         else:
             raise Error("Project name hasn't been set")
 
-        lib1 = self.convert_to_tag(self.libraries[0])
-        lib2 = self.convert_to_tag(self.libraries[1])
-        input = " ".join([lib1, lib2])
+        input = " ".join(self.libraries)
 
         # Usage: ./ChIPDiff sample_L1.tag sample_L2.tag chrom_descr.txt config.txt sample
         runstring = "{0}/myChIPDiff {1} {2} {3} {4}".format(self.where_chipdiff,
@@ -65,4 +46,4 @@ class ChipDiff(AbstractTool):
                                                             self.where_chipdiff + "config.txt",
                                                             self.projname)
 
-        run_in_shell(runstring)
+        sh(runstring)

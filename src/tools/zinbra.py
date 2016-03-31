@@ -11,6 +11,8 @@ class Zinbra(AbstractTool):
                        condition1_rep1=None, condition1_rep2=None,
                        condition2_rep1=None, condition2_rep2=None):
 
+        INFO("Congiguring Zinbra working data...")
+
         if reference is not None:
             self.reference = reference
 
@@ -27,6 +29,9 @@ class Zinbra(AbstractTool):
             self.replicates_pool[1][1] = condition2_rep2
 
     def configure_run_params(self, fdr=None, bed=None, only=None):
+
+        INFO("Congiguring Zinbra run params...")
+
         if fdr is not None:
             self.fdr = fdr
 
@@ -56,7 +61,7 @@ class Zinbra(AbstractTool):
         if self.only is not None:
             runstring += " --only {0}".format(self.only)
 
-        run_in_shell(runstring)
+        sh(runstring)
 
     def run_compare(self):
         if list(map(len, self.replicates_pool)) not in [[2, 2], [1, 1]]:
@@ -72,9 +77,11 @@ class Zinbra(AbstractTool):
                     " -2 {3}".format(self.where_zinbra, self.reference, condition1, condition2)
         runstring += " --bed {0}".format(self.bed)
         runstring += " --fdr {0}".format(self.fdr)
-        # runstring += " --only {0}".format(self.only)
 
-        run_in_shell(runstring)
+        # TODO fixme
+        runstring += " --only {0}".format(self.only)
+
+        sh(runstring)
 
     def run(self, compare=False, bed=None):
         if bed is not None:

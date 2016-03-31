@@ -6,15 +6,6 @@ class MAnorm(AbstractTool):
     def __init__(self, path):
         self.where_manorm = path
 
-    def preprocess_if_necessary(self):
-        ex = "mnr"
-        cond_cols = [4, 5, 6]
-        ctrl_cols = [4, 5]
-        self.conditions[0] = drop_columns_and_save(self.conditions[0], ex, cond_cols)
-        self.conditions[1] = drop_columns_and_save(self.conditions[1], ex, cond_cols)
-        self.controls[0] = drop_columns_and_save(self.controls[0], ex, ctrl_cols)
-        self.controls[1] = drop_columns_and_save(self.controls[1], ex, ctrl_cols)
-
     def configure_run_params(self, outdir, d1, d2):
         if outdir is not None:
             self.outdir = outdir
@@ -40,10 +31,8 @@ class MAnorm(AbstractTool):
         if len(self.conditions) != 2 and len(self.controls) != 2:
             raise Error("Controls and conditions has not been set")
 
-        self.preprocess_if_necessary()
-
-        runstring = "cp {0}/MAnorm.sh {1}" \
-                    "cp {0}/MAnorm.r {1} " \
+        runstring = "cp {0}/MAnorm.sh {1}; " \
+                    "cp {0}/MAnorm.r {1}; " \
                     "cd {1}; ./MAnorm.sh" \
                     " {2}" \
                     " {3}" \
@@ -54,4 +43,4 @@ class MAnorm(AbstractTool):
                                       self.controls[0], self.controls[1],
                                       self.d1, self.d2)
 
-        run_in_shell(runstring)
+        sh(runstring)
