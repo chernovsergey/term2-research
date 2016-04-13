@@ -39,7 +39,8 @@ def parse_d(filename):
         result = str.strip(str.split(result.output, ": ")[1])
         return result
     else:
-        raise Error("file does not exist")
+
+        raise Error("file {0} does not exist".format(filename))
 
 
 def INFO(message):
@@ -52,3 +53,6 @@ def DEBUG(message):
 
 def ERR(message):
     logging.error(message)
+
+
+get_basename = lambda x: os.path.basename(x)

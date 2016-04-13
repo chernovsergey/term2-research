@@ -30,7 +30,6 @@ class SICER(AbstractTool):
 
     def run(self):
 
-        get_base = lambda x: os.path.basename(x)
         self.datadir = os.path.split(self.controls[0])[0]
 
         runstring = "export SICER=\"{2}\"; " \
@@ -39,8 +38,8 @@ class SICER(AbstractTool):
                     "cd {2}; " \
                     "./SICER-df.sh {3} {4} {5} {6} {7} {8} {9} {10}".format(
             self.datadir, self.outdir, self.where_sicer,
-            get_base(self.conditions[0]), get_base(self.controls[0]),
-            get_base(self.conditions[1]), get_base(self.controls[1]),
+            get_basename(self.conditions[0]), get_basename(self.controls[0]),
+            get_basename(self.conditions[1]), get_basename(self.controls[1]),
             self.windowsize, self.gap, self.fdr1, self.fdr2)
 
         sh(runstring)

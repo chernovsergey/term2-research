@@ -16,31 +16,32 @@ class MAnorm(AbstractTool):
             self.d1 = d1
             self.d2 = d2
 
-    def configure_data(self, cond1=None, control1=None, cond2=None, control2=None):
-        if cond1 is not None and cond2 is not None:
-            self.conditions = [cond1, cond2]
-        else:
-            raise Error("Wrong condition files")
+    def configure_data(self, summits1=None, summits2=None,
+                       cond1_rep1=None, cond1_rep2=None,
+                       cond2_rep1=None, cond2_rep2=None):
 
-        if control1 is not None and control2 is not None:
-            self.controls = [control1, control2]
+        if None in [summits1, summits2, cond1_rep1, cond1_rep2, cond2_rep1, cond2_rep2]:
+            raise Error("Wrong input files")
         else:
-            raise Error("Wrong control files")
+            self.conditions = [cond1_rep1, cond1_rep2, cond2_rep1, cond2_rep2]
+            self.peaks = [summits1, summits2]
+
 
     def run(self):
-        if len(self.conditions) != 2 and len(self.controls) != 2:
+        if len(self.conditions) != 4 and len(self.peaks) != 2:
             raise Error("Controls and conditions has not been set")
 
-        runstring = "cp {0}/MAnorm.sh {1}; " \
-                    "cp {0}/MAnorm.r {1}; " \
-                    "cd {1}; ./MAnorm.sh" \
+        runstring = "cp {0}/MAnorm3.sh {1}; " \
+                    "cp {0}/MAnorm3.R {1}; " \
+                    "cd {1}; ./MAnorm3.sh" \
+                    " project_cond1_cond2" \
                     " {2}" \
                     " {3}" \
                     " {4}" \
                     " {5}" \
-                    " {6} {7}".format(self.where_manorm, self.outdir,
-                                      self.conditions[0], self.conditions[1],
-                                      self.controls[0], self.controls[1],
-                                      self.d1, self.d2)
+                    " {6} {6} {7} {7}".format(self.where_manorm, self.outdir,
+                                              self.conditions[0], self.conditions[1],
+                                              self.conditions[2], self.conditions[3],
+                                              self.d1, self.d2)
 
         sh(runstring)

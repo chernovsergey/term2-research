@@ -79,7 +79,8 @@ class Zinbra(AbstractTool):
         runstring += " --fdr {0}".format(self.fdr)
 
         # TODO fixme
-        runstring += " --only {0}".format(self.only)
+        if hasattr(self, "only"):
+            runstring += " --only {0}".format(self.only)
 
         sh(runstring)
 

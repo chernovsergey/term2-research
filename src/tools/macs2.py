@@ -28,23 +28,33 @@ class MACS2(AbstractTool):
         self.maxgap = maxgap
 
     # TODO add parameters in accordance with macs2 callpeak --help
-    def callpeaks(self, condition, control, name, extsize, outdir):
+    def callpeaks(self, condition, control, name, extsize, outdir, needB=True):
         """
         macs2 callpeak -B -t cond1_ChIP.bam -c cond1_Control.bam -n cond1 --nomodel --extsize 120
         """
-        runstring = "cd {5}; {0}/macs2 callpeak -B" \
-                    " -t {1}" \
-                    " -c {2}" \
-                    " -n {3}" \
-                    " --nomodel " \
-                    " --extsize {4}".format(self.where_macs2, condition, control, name, extsize,
-                                            outdir)
-        sh(runstring)
 
+        # Return files
         t = outdir + name + "_treat_pileup.bdg"
         c = outdir + name + "_control_lambda.bdg"
-        d = parse_d(outdir + name + "_peaks.xls")
-        return t, c, d
+        s = outdir + name + "_summits.bed"
+        d = ""
+
+        if False in list(map(os.path.exists, [t, c, s])):
+            runstring = "cd {0}; {1}/macs2 callpeak".format(outdir, self.where_macs2)
+            if needB is True:
+                runstring += " -B"
+            runstring += " -t {0}" \
+                         " -c {1}" \
+                         " -n {2}" \
+                         " --nomodel " \
+                         " --extsize {3}".format(condition, control, name, extsize)
+            sh(runstring)
+            d = parse_d(outdir + name + "_peaks.xls")
+
+        if needB is True:
+            return t, c, s, d
+        else:
+            return s, d
 
     def run(self, prefix):
         if len(self.conditions) != 2 and len(self.controls) != 2:
@@ -59,14 +69,14 @@ class MACS2(AbstractTool):
             raise Error("Passed wrong prefix")
 
         # TODO it's may be useless step
-        self.conditions[0], self.controls[0], d1 = self.callpeaks(self.conditions[0],
-                                                                  self.controls[0],
-                                                                  prefix + "cond1", 120,
-                                                                  self.outdir)
-        self.conditions[1], self.controls[1], d2 = self.callpeaks(self.conditions[1],
-                                                                  self.controls[1],
-                                                                  prefix + "cond2", 120,
-                                                                  self.outdir)
+        self.conditions[0], self.controls[0], _, d1 = self.callpeaks(self.conditions[0],
+                                                                     self.controls[0],
+                                                                     prefix + "cond1", 120,
+                                                                     self.outdir)
+        self.conditions[1], self.controls[1], _, d2 = self.callpeaks(self.conditions[1],
+                                                                     self.controls[1],
+                                                                     prefix + "cond2", 120,
+                                                                     self.outdir)
 
         runstring = "{0}/macs2 bdgdiff" \
                     " --t1 {1}" \
