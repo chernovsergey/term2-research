@@ -1,6 +1,6 @@
 from src.tools.chipdiff import *
 from src.tools.macs2 import *
-from src.tools.sicer import SICER
+from src.tools.sicer import *
 from src.tools.zinbra import *
 
 
@@ -9,9 +9,9 @@ def run_macs2(rep1, rep2, input_rep1, input_rep2, macs2_path, output_folder, pre
     macs2.configure_run_params(output_folder)
     macs2.configure_data(rep1, input_rep1, rep2, input_rep2)
     macs2.run(prefix)
-    file_cond1 = output_folder + prefix + "_c3.0_cond1.bed"
-    file_cond2 = output_folder + prefix + "_c3.0_cond2.bed"
-    file_commn = output_folder + prefix + "_c3.0_common.bed"
+    file_cond1 = output_folder + "/" + prefix + "_c3.0_cond1.bed"
+    file_cond2 = output_folder + "/" + prefix + "_c3.0_cond2.bed"
+    file_commn = output_folder + "/" + prefix + "_c3.0_common.bed"
     return file_cond1, file_cond2, file_commn
 
 

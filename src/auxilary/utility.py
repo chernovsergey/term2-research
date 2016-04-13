@@ -56,3 +56,5 @@ def ERR(message):
 
 
 get_basename = lambda x: os.path.basename(x)
+
+get_basepath = lambda x: os.path.dirname(x)

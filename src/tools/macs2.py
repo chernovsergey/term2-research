@@ -34,9 +34,9 @@ class MACS2(AbstractTool):
         """
 
         # Return files
-        t = outdir + name + "_treat_pileup.bdg"
-        c = outdir + name + "_control_lambda.bdg"
-        s = outdir + name + "_summits.bed"
+        t = outdir + "/" + name + "_treat_pileup.bdg"
+        c = outdir + "/" + name + "_control_lambda.bdg"
+        s = outdir + "/" + name + "_summits.bed"
         d = ""
 
         if False in list(map(os.path.exists, [t, c, s])):
@@ -49,7 +49,7 @@ class MACS2(AbstractTool):
                          " --nomodel " \
                          " --extsize {3}".format(condition, control, name, extsize)
             sh(runstring)
-            d = parse_d(outdir + name + "_peaks.xls")
+            d = parse_d(outdir + "/" + name + "_peaks.xls")
 
         if needB is True:
             return t, c, s, d
