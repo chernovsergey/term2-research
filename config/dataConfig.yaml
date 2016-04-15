@@ -1,0 +1,15 @@
+# YAML
+
+humangenome: /home/denovo/AU/Research/Data/hg19.2bit
+
+condition_first:
+    replicate_first: /home/denovo/AU/Research/Data/bed/FOXA1/chr11/GSM1534736_FOXA1_ChIP-seq_Vehicle_rep1_chr11.bed
+    input_replicate_first: /home/denovo/AU/Research/Data/bed/FOXA1/chr11/GSM1534712_Input_ChIP-seq_Vehicle_rep1_chr11.bed
+    replicate_second: /home/denovo/AU/Research/Data/bed/FOXA1/chr11/GSM1534737_FOXA1_ChIP-seq_Vehicle_rep2_chr11.bed
+    input_replicate_second: /home/denovo/AU/Research/Data/bed/FOXA1/chr11/GSM1534713_Input_ChIP-seq_Vehicle_rep2_chr11.bed
+
+condition_second:
+    replicate_first: /home/denovo/AU/Research/Data/bed/FOXA1/chr11/GSM1534738_FOXA1_ChIP-seq_E2_rep1_chr11.bed
+    input_replicate_first: /home/denovo/AU/Research/Data/bed/FOXA1/chr11/GSM1534714_Input_ChIP-seq_E2_rep1_chr11.bed
+    replicate_second: /home/denovo/AU/Research/Data/bed/FOXA1/chr11/GSM1534739_FOXA1_ChIP-seq_E2_rep2_chr11.bed
+    input_replicate_second: /home/denovo/AU/Research/Data/bed/FOXA1/chr11/GSM1534715_Input_ChIP-seq_E2_rep2_chr11.bed
