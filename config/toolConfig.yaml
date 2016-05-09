@@ -1,9 +1,9 @@
 # YAML
 
-#sicer:
-#    outdir: /home/denovo/AU/Research/Data/tools_output/sicer
-#    path: /home/denovo/AU/Research/Tools/sicer
-#    projname: diff_e2_vh
+sicer:
+    outdir: /home/denovo/AU/Research/Data/tools_output/sicer
+    path: /home/denovo/AU/Research/Tools/sicer
+    projname: diff_e2_vh
 
 #manorm:
 #    outdir: /home/denovo/AU/Research/Data/tools_output/manorm

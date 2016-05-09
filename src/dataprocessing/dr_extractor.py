@@ -3,7 +3,7 @@ from src.tools.running import *
 
 
 class DiffRegionsExtractor:
-    files_to_benchmark = []
+    files_to_benchmark = {}
 
     def __init__(self, dataconfig, toolconfig):
         self.dataconf = dataconfig
@@ -108,16 +108,12 @@ class DiffRegionsExtractor:
         return methods
 
     def extract(self):
-        tools = self.get_dr_extractors()
-        for tool in tools:
-            method = getattr(self, tool)
-            name = str.split(tool, "_")[-1]
+        dr_extractors = self.get_dr_extractors()
+        for extractor in dr_extractors:
+            name = str.split(extractor, "_")[-1]
+            method_ref = getattr(self, extractor)
             if hasattr(self, name):
-                output = method()
-                if type(output) == type(list):
-                    for file in output:
-                        self.files_to_benchmark.append(file)
-                else:
-                    self.files_to_benchmark.append(output)
+                output = method_ref()
+                self.files_to_benchmark[name] = output
 
         return self.files_to_benchmark
