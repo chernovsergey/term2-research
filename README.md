@@ -1,13 +1,13 @@
 # JetBrains BioLabs project
 
 ## Roadmap :
-* familiarize with:
-    - epigenetics in general
+* base:
+    - epigenetics
     - ChIP-Seq
-    - peak calling(differential)
+    - peak calling
 * wrap tools CHip-Seq analysis
 * develop prototype of benchmark
-* ? Make some service for benchmarking tools
+* Make some service for benchmarking tools(optional)
 
 
 ## GSM's used
