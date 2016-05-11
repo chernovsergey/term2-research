@@ -3,9 +3,9 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("-t", "--toolconfig",
-                        help="YAML file with tool config. See example at github.com/chernovsergey/term2-research")
+                        help="YAML file with tool config. See example in <config> folder")
     parser.add_argument("-d", "--dataconfig",
-                        help="YAML file with data config. See example at github.com/chernovsergey/term2-research")
+                        help="YAML file with data config. See example in <config> folder")
 
     args = parser.parse_args()
 
