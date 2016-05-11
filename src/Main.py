@@ -1,23 +1,35 @@
-from src.bench.benchmark import Benchmark
-from src.dataprocessing.preprocessing import *
-
-
 def main():
-    # p = DiffRegionsExtractor("config/dataConfig.yaml", "config/toolConfig.yaml")
-    # regions = p.extract()
+    import argparse
+    parser = argparse.ArgumentParser()
 
-    regions = {
-        "chipdiff": "/home/denovo/AU/Research/Data/tools_output/chipdiff/diff_e2_vh.region",
-        "macs2": "/home/denovo/AU/Research/Data/tools_output/macs2/diff_e2_vh_c3.0_common.bed",
-        "zinbra": "/home/denovo/AU/Research/Data/tools_output/zinbra/diff_e2_vh.bed",
-        # "sicer":"/home/denovo/AU/Research/Data/tools_output/sicer/pooled_replicates_cond1-and-pooled_replicates_cond2-W200-G200-summary"
-    }
+    parser.add_argument("-t", "--toolconfig",
+                        help="YAML file with tool config. See example at github.com/chernovsergey/term2-research")
+    parser.add_argument("-d", "--dataconfig",
+                        help="YAML file with data config. See example at github.com/chernovsergey/term2-research")
 
-    b = Benchmark(regions)
-    b.start()
+    args = parser.parse_args()
+
+    if args.toolconfig and args.dataconfig:
+        print "Configuration file %s will be used as tool config" % args.toolconfig
+        print "Configuration file %s will be used as data source" % args.dataconfig
+
+        from src.dataprocessing.dr_extractor import DiffRegionsExtractor
+        p = DiffRegionsExtractor(args.dataconfig, args.toolconfig)
+        regions = p.extract()
+
+        from src.bench.benchmark import Benchmark
+        b = Benchmark(regions)
+        b.start()
 
 
 if __name__ == '__main__':
+    import sys
+    import os.path
+
+    sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+    from src.dataprocessing.preprocessing import *
+
     logging.basicConfig(filename='runlog.log', format='%(asctime)s %(message)s %(levelname)s',
                         level=logging.INFO)
     logging.getLogger().addHandler(logging.StreamHandler())

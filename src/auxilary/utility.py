@@ -39,7 +39,6 @@ def parse_d(filename):
         result = str.strip(str.split(result.output, ": ")[1])
         return result
     else:
-
         raise Error("file {0} does not exist".format(filename))
 
 

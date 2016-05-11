@@ -78,7 +78,6 @@ class Zinbra(AbstractTool):
         runstring += " --bed {0}".format(self.bed)
         runstring += " --fdr {0}".format(self.fdr)
 
-        # TODO fixme
         if hasattr(self, "only"):
             runstring += " --only {0}".format(self.only)
 

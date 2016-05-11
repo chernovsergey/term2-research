@@ -66,7 +66,6 @@ class Benchmark:
                 plt.savefig("peaks_covdif_%s_%s" % (out1, out2))
 
     def __show_venn_diagram(self):
-
         subsets = list()
         for file_idx in xrange(len(self.input)):
             curset = list()

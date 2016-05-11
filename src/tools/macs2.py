@@ -68,7 +68,6 @@ class MACS2(AbstractTool):
         else:
             raise Error("Passed wrong prefix")
 
-        # TODO it's may be useless step
         self.conditions[0], self.controls[0], _, d1 = self.callpeaks(self.conditions[0],
                                                                      self.controls[0],
                                                                      prefix + "cond1", 120,

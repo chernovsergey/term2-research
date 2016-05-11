@@ -32,34 +32,12 @@ def venn(data, names=None, fill="number", show_names=True, show_plot=True, **kwd
 
 # --------------------------------------------------------------------
 def get_labels(data, fill="number"):
-    """
-    to get a dict of labels for groups in data
-
-    input
-      data: data to get label for
-      fill = ["number"|"logic"|"both"], fill with number, logic label, or both
-
-    return
-      labels: a dict of labels for different sets
-
-    example:
-    In [12]: get_labels([range(10), range(5,15), range(3,8)], fill="both")
-    Out[12]:
-    {'001': '001: 0',
-     '010': '010: 5',
-     '011': '011: 0',
-     '100': '100: 3',
-     '101': '101: 2',
-     '110': '110: 2',
-     '111': '111: 3'}
-    """
 
     N = len(data)
 
     sets_data = [set(data[i]) for i in range(N)]  # sets for separate groups
     s_all = set(chain(*data))  # union of all sets
 
-    # bin(3) --> '0b11', so bin(3).split('0b')[-1] will remove "0b"
     set_collections = {}
     for n in range(1, 2 ** N):
         key = bin(n).split('0b')[-1].zfill(N)
@@ -101,11 +79,11 @@ def venn2(data=None, names=None, fill="number", show_names=True, show_plot=True,
         figsize = (8, 8)
 
     fig = pylab.figure(figsize=figsize)
-    ax = fig.gca();
+    ax = fig.gca()
     ax.set_aspect("equal")
-    ax.set_xticks([]);
-    ax.set_yticks([]);
-    ax.set_xlim(0, 8);
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_xlim(0, 8)
     ax.set_ylim(0, 8)
 
     # r: radius of the circles
@@ -161,9 +139,9 @@ def venn3(data=None, names=None, fill="number", show_names=True, show_plot=True,
     fig = pylab.figure(figsize=figsize)  # set figure size
     ax = fig.gca()
     ax.set_aspect("equal")  # set aspect ratio to 1
-    ax.set_xticks([]);
-    ax.set_yticks([]);
-    ax.set_xlim(0, 8);
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_xlim(0, 8)
     ax.set_ylim(0, 8)
 
     # r: radius of the circles
