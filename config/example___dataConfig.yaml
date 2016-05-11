@@ -1,0 +1,15 @@
+# YAML
+
+humangenome: /home/dirname/hg19.2bit
+
+condition_first:
+    replicate_first: /home/dirname/condition_one/rep1.bed
+    input_replicate_first: /home/dirname/input1_rep1.bed
+    replicate_second: /home/dirname/condition_one/rep2.bed
+    input_replicate_second: /home/dirname/input1_rep1.bed
+
+condition_second:
+    replicate_first: /home/dirname/condition_two/rep1.bed
+    input_replicate_first: /home/dirname/input2_rep1.bed
+    replicate_second: /home/dirname/condition_two/rep2.bed
+    input_replicate_second: /home/dirname/input2_rep1.bed

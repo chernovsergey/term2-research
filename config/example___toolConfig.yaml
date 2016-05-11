@@ -1,0 +1,30 @@
+# YAML
+
+# Here just an example of how your tool config file may look like
+
+sicer:
+    outdir: /home/tools_output/sicer
+    path: /home/sicer/bin
+    projname: diff_cond1_cond2
+
+manorm:
+    outdir: /home/tools_output/manorm
+    path: /home/manorm/bin
+    projname: diff_cond1_cond2
+
+macs2:
+    outdir: /home/tools_output/macs2
+    path: /home/macs2/bin
+    projname: diff_cond1_cond2
+
+chipdiff:
+    outdir: /home/tools_output/chipdiff
+    path: /home/chipdiff/bin
+    chromosomes: /home/denovo/AU/Research/Data/bed/chrom_descr.txt
+    projname: diff_cond1_cond2
+
+zinbra:
+    outdir: /home/tools_output/zinbra
+    path: /home/zinbra/bin
+    projname: diff_e2_vh
+    only_chr: chr11
