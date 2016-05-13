@@ -1,7 +1,5 @@
 # JetBrains BioLabs project
 
-## Synopsis
-
 This is term research project goals to develop benchmark prototype for comprehensive tool comparison, which is easy to extend with new tools and tests.
 
 ## Motivation
