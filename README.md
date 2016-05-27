@@ -46,3 +46,22 @@ ChIP-seq analysis](http://bib.oxfordjournals.org/content/early/2016/01/12/bib.bb
 * MACS2
 * SICER
 * MAnorm
+
+## Running
+
+```(python)
+[term2-research]$ python src/Main.py -h
+Started
+usage: Main.py [-h] [-t TOOLCONFIG] [-d DATACONFIG]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t TOOLCONFIG, --toolconfig TOOLCONFIG
+                        YAML file with tool config. See example in <config>
+                        folder
+  -d DATACONFIG, --dataconfig DATACONFIG
+                        YAML file with data config. See example in <config>
+                        folder
+```
+
+## How to add new tool for benchmarking
