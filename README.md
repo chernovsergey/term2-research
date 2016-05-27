@@ -66,10 +66,9 @@ optional arguments:
 
 To begin comparison with new tool you have to proceed the following steps:
 * Create ```tool_name.py``` file in ```src/tools``` which implements interface ```AbstractTool```. Precicely you need to implement only three methods:
-- ```configure_data```
-- ```configure_run_params```
-- ```run```
-In the configuration methods you are free to pass any arguments you want to be saved as tool state
+     - ```configure_data```
+     - ```configure_run_params```
+     - ```run```
 
 * Add running method in the ```src/tools/running.py``` to be able to start your tool with given params from outside
 * Add method with signature ```___extract_newtoolname(self)``` inside of class ```src/dataprocessing/dr_extractor.py``` which has access to data you work with and configuration params you
