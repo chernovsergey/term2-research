@@ -69,6 +69,7 @@ To begin comparison with new tool you have to proceed the following steps:
      - ```configure_data```
      - ```configure_run_params```
      - ```run```
+     In the configuration methods you are free to pass any arguments you want to be saved as tool state
 
 * Add running method in the ```src/tools/running.py``` to be able to start your tool with given params from outside
 * Add method with signature ```___extract_newtoolname(self)``` inside of class ```src/dataprocessing/dr_extractor.py``` which has access to data you work with and configuration params you
