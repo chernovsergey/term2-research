@@ -77,3 +77,12 @@ To begin comparison with new tool you have to proceed the following steps:
 
 ## How to extend benhmarking set
 You havе to provide just another method of class ```Benchmark``` which is placed in ```src/bench/benchmarking.py``` with name ```__show_smth_you_want(self)```. This method will be started automatically with another tests after peak extraction. 
+
+## Available benchmarks for now
+* Peak length distribution
+* Number of DRs
+* Consistency diagrams(Venn and scatterplots)
+
+## FAQ
+* How many tools will be compared after start? 
+    - As many as you described in the configuration file. If you want to compare just a subset of tools, you may comment out the rest 
