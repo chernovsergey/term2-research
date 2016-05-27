@@ -74,3 +74,6 @@ To begin comparison with new tool you have to proceed the following steps:
 * Add running method in the ```src/tools/running.py``` to be able to start your tool with given params from outside
 * Add method with signature ```___extract_newtoolname(self)``` inside of class ```src/dataprocessing/dr_extractor.py``` which has access to data you work with and configuration params you
 * Append YAML configuration block for your tool which contains any keys you need(see ```config/example__toolConfig```)
+
+## How to extend benhmarking set
+You hava to provide just another method of class ```Benchmark``` which is placed in ```src/bench/benchmarking.py``` with name ```__show_smth_you_want(self)```. This method will be started automatically with another tests after peak extraction. 
